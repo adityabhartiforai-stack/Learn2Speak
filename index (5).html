@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Learn 2 Speak (L2S)</title>
+<style>
+:root{--bg:#f6f4ee;--ink:#1d2a2a;--card:#fff;--line:#d9d5c8;--main:#0f766e;--hi:#f59e0b;--bad:#c2410c;--ok:#15803d}
+@media(prefers-color-scheme:dark){:root{--bg:#121a1a;--ink:#e8efee;--card:#1b2626;--line:#2f3d3d;--main:#2dd4bf}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Trebuchet MS",system-ui,sans-serif}
+header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:2px solid var(--line);flex-wrap:wrap;gap:8px}
+h1{margin:0;font:800 24px Georgia,serif;letter-spacing:-.5px}h1 span{color:var(--main)}
+.stats{display:flex;gap:12px;font-weight:700}
+nav{display:flex;gap:6px;padding:10px 16px;overflow-x:auto}
+nav button{border:2px solid var(--line);background:var(--card);color:var(--ink);padding:8px 16px;border-radius:20px;font-weight:700;cursor:pointer}
+nav button.on{background:var(--main);color:#fff;border-color:var(--main)}
+main{max-width:760px;margin:0 auto;padding:8px 16px 40px}
+.card{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:16px;margin:12px 0}
+button.p{background:var(--main);color:#fff;border:0;border-bottom:4px solid rgba(0,0,0,.25);padding:10px 20px;border-radius:12px;font-weight:800;cursor:pointer;font-size:15px}
+button.p:disabled{opacity:.5}button.g{background:none;border:2px solid var(--line);color:var(--ink);padding:8px 14px;border-radius:12px;cursor:pointer;font-weight:700}
+input,select{padding:9px;border:2px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:inherit;width:100%}
+label{font-weight:700;font-size:14px;display:block;margin:10px 0 4px}
+.opt{display:block;width:100%;text-align:left;margin:8px 0;padding:12px;border:2px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);cursor:pointer;font:inherit}
+.opt.right{border-color:var(--ok);background:rgba(21,128,61,.15)}.opt.wrong{border-color:var(--bad);background:rgba(194,65,12,.15)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.sc{cursor:pointer;text-align:left;border:2px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);padding:14px;font:inherit}
+.sc:hover{border-color:var(--main)}.sc b{display:block;font-size:17px}
+#log{height:46vh;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:4px}
+.m{max-width:85%;padding:9px 13px;border-radius:14px;white-space:pre-wrap}
+.m.u{align-self:flex-end;background:var(--main);color:#fff}.m.a{align-self:flex-start;background:var(--card);border:2px solid var(--line)}
+.row{display:flex;gap:8px;margin-top:8px}.bar{height:12px;background:var(--line);border-radius:6px;overflow:hidden}.bar i{display:block;height:100%;background:var(--hi)}
+.muted{opacity:.7;font-size:14px}.big{font:800 54px Georgia,serif;color:var(--main)}
+.mic.on{background:var(--bad)}
+
+body{background:radial-gradient(900px 500px at 10% -10%,#14b8a655,transparent),radial-gradient(700px 500px at 100% 10%,#f59e0b44,transparent),var(--bg);min-height:100vh;overflow-x:hidden}
+body:before,body:after{content:"";position:fixed;z-index:-1;border-radius:50%;animation:fl 9s ease-in-out infinite}
+body:before{width:220px;height:220px;right:-70px;top:35%;background:radial-gradient(circle at 30% 30%,#fff8,#14b8a6 40%,#0b4f4a);box-shadow:0 30px 60px #0006}
+body:after{width:140px;height:140px;left:-50px;bottom:10%;background:radial-gradient(circle at 30% 30%,#fff9,#f59e0b 45%,#92400e);animation-delay:-4s}
+@keyframes fl{50%{transform:translateY(-24px)}}
+.card{box-shadow:0 2px 0 #fff3 inset,0 6px 0 var(--line),0 24px 40px #0003}
+button.p{background:linear-gradient(#3ee0cf,#0f9488);box-shadow:0 5px 0 #0a5e56,0 12px 18px #0005;border:0;transition:transform .1s}
+button.p:active{transform:translateY(4px);box-shadow:0 1px 0 #0a5e56}
+nav button{box-shadow:0 3px 0 var(--line)}nav button.on{box-shadow:0 4px 0 #0a5e56}
+.sc{transition:transform .15s;box-shadow:0 6px 0 var(--line),0 16px 24px #0003}
+.hd{display:flex;gap:14px;align-items:center}
+.av{width:64px;height:64px;border-radius:50%;flex:none;background:radial-gradient(circle at 30% 25%,#fff7,transparent 45%),var(--bgc,#2dd4bf);box-shadow:inset -6px -8px 14px #0004,0 8px 14px #0004;overflow:hidden}
+.av svg{width:100%;height:100%;display:block}
+.av.lg{width:84px;height:84px}.av.xl{width:120px;height:120px}
+.av.sm{width:38px;height:38px;box-shadow:inset -3px -4px 7px #0004,0 3px 6px #0004}
+.av.talk{animation:tk .5s ease-in-out infinite alternate}@keyframes tk{to{transform:translateY(-6px) scale(1.06)}}
+.mr{display:flex;gap:8px;align-items:flex-end}.mr.u{justify-content:flex-end}
+.av{background:var(--bgc,#a5c8ff);box-shadow:inset 0 -6px 12px #0002,0 8px 14px #0003}
+.chips{display:grid;grid-template-columns:repeat(2,38px);gap:8px;margin-left:auto}.chips i{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font:700 13px sans-serif;font-style:normal;color:#334155;box-shadow:0 4px 8px #0003}
+@media(max-width:520px){.chips{display:none}}
+.rw{display:flex;gap:8px;flex-wrap:wrap}.sw{min-width:34px;height:34px;border-radius:17px;border:3px solid transparent;cursor:pointer;box-shadow:0 3px 0 #0003;padding:0 10px;font:700 13px sans-serif;color:var(--ink);background:var(--card)}.sw.on{border-color:var(--ink)}
+</style></head><body>
+<header><h1>Learn <span>2</span> Speak <small class="muted">L2S</small></h1>
+<div class="stats"><span id="st">🔥 0</span><span id="xp">⭐ 0 XP</span></div></header>
+<nav id="nav"></nav><main id="v"></main>
+<script>
+const $=s=>document.querySelector(s),LS=JSON.parse(localStorage.l2s||'{}');
+const S=Object.assign({key:'',model:'gemini-3.8-flash',lang:'Spanish',level:'Beginner',xp:0,streak:0,last:'',voice:true},LS);
+const save=()=>{localStorage.l2s=JSON.stringify(S);$('#xp').textContent='⭐ '+S.xp+' XP';$('#st').textContent='🔥 '+S.streak}
+const LANGS={English:'en-US',Spanish:'es-ES',French:'fr-FR',German:'de-DE',Hindi:'hi-IN',Japanese:'ja-JP',Italian:'it-IT',Portuguese:'pt-BR',Korean:'ko-KR'};
+const SCEN=[
+['💼','Job interview','You are a professional interviewer. Ask one interview question at a time, follow up on answers, and be realistic.','interviewer','Mr. Sharma (Interviewer)'],
+['🎤','Public speaking','You are a speaking coach and audience. The user gives a short speech or pitch; react as an audience member and ask a question after each part.','coach','Coach Rohan'],
+['⚖️','Debate','You are a debate opponent. Pick a topic if the user has not, argue the opposite side politely, and challenge their reasoning.','debater','Priya (Opponent)'],
+['💬','Talk to your crush','You are Maya, a friendly young woman the learner has just met and likes. Chat like a real person: show interest, joke lightly, react to what they say, be a little shy or teasing sometimes. Keep it respectful and PG. If they are rude or pushy, set a polite boundary. Ask questions so they must keep the conversation going.','crush','Maya'],
+['🍽️','Restaurant','You are a waiter in a restaurant. Take the order naturally.','waiter','Arjun (Waiter)'],
+['✈️','Airport / travel','You are an airport check-in agent. Keep it realistic.','agent','Neha (Check-in)'],
+['🩺','Doctor visit','You are a doctor. Ask about symptoms simply.','doctor','Dr. Mehta'],
+['🤝','Small talk','You are a friendly stranger at a social event. Chat casually.','friend','Kabir']];
+let tab='learn',chat=null,quiz=null,rec=null,tutorC=null;
+function today(){return new Date().toDateString()}
+function bump(x){S.xp+=x;if(S.last!==today()){S.streak=(S.last===new Date(Date.now()-864e5).toDateString())?S.streak+1:1;S.last=today()}save()}
+async function gem(contents,sys,json){
+ if(!S.key)throw Error('Add your free Gemini API key in Settings.');
+ const body={contents,generationConfig:{maxOutputTokens:json?2500:700,temperature:.8,thinkingConfig:{thinkingLevel:'low'}}};
+ if(sys)body.systemInstruction={parts:[{text:sys}]};
+ if(json)body.generationConfig.responseMimeType='application/json';
+ const go=()=>fetch(`https://generativelanguage.googleapis.com/v1beta/models/${S.model}:generateContent`,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':S.key},body:JSON.stringify(body)});
+ let r=await go(),d=await r.json();
+ if(!r.ok&&/think/i.test(d.error?.message||'')){delete body.generationConfig.thinkingConfig;r=await go();d=await r.json()}
+ if(!r.ok)throw Error(d.error?.message||'API error');
+ const t=d.candidates?.[0]?.content?.parts?.map(p=>p.text).join('')||'';
+ return json?JSON.parse(t):t}
+const el=(h)=>{const d=document.createElement('div');d.innerHTML=h;return d.firstElementChild};
+function nav(){const n=$('#nav');n.innerHTML='';[['learn','Learn'],['tutor','AI tutor'],['practice','Speaking practice'],['settings','Settings']].forEach(([k,l])=>{const b=el(`<button class="${tab===k?'on':''}">${l}</button>`);b.onclick=()=>{tab=k;chat=chat&&k==='practice'?chat:null;render()};n.appendChild(b)})}
+function render(){const v=$('#v');if(!S.setup){$('#nav').innerHTML='';v.innerHTML='';rSetup(v);return}nav();v.innerHTML='';({learn:rLearn,tutor:()=>rChat(v,tutorC=tutorC||{sys:tutorSys(),av:'tutor',bn:S.tutor.name,title:'AI tutor ('+S.lang+')',open:`Hi${S.me.name?' '+S.me.name:''}! I'm ${S.tutor.name}, your ${S.lang} tutor. Say anything in ${S.lang} and I'll reply and gently correct you.`}),practice:rPractice,settings:rSet})[tab](v)}
+const eyes=(g)=>`<path d="M37 40.5Q41.5 37.5 46 40M54 40Q58.5 37.5 63 40" stroke="#3a2220" stroke-width="1.8" fill="none" stroke-linecap="round"/><ellipse cx="42" cy="46" rx="2.2" ry="2.9" fill="#2b1816"/><ellipse cx="58" cy="46" rx="2.2" ry="2.9" fill="#2b1816"/><circle cx="42.8" cy="44.9" r=".9" fill="#fff"/><circle cx="58.8" cy="44.9" r=".9" fill="#fff"/>`;
+const mouth='<circle cx="37.5" cy="54" r="4.2" fill="#f28b82" opacity=".5"/><circle cx="62.5" cy="54" r="4.2" fill="#f28b82" opacity=".5"/><path d="M50 49.5Q52 52.5 49.5 52.8" stroke="#c98c6e" stroke-width="1.3" fill="none" stroke-linecap="round"/><path d="M43.5 55.5Q50 63.5 56.5 55.5" stroke="#6b2f27" stroke-width="2.5" fill="none" stroke-linecap="round"/>';
+const HF={short:h=>`<path d="M32 44Q28 20 50 19Q72 20 68 44Q65 32 56 30Q46 34 37 31Q34 35 32 44Z" fill="${h}"/>`,quiff:h=>`<path d="M31 45Q26 22 43 16Q57 10 68 21Q76 30 69 45Q66 34 58 31Q46 35 36 32Q33 37 31 45Z" fill="${h}"/>`,long:h=>`<path d="M30 48Q28 20 50 20Q72 20 70 48Q65 33 52 32Q40 34 30 48Z" fill="${h}"/>`,bun:h=>`<circle cx="50" cy="13" r="7" fill="${h}"/><path d="M30 48Q28 20 50 20Q72 20 70 48Q65 33 52 32Q40 34 30 48Z" fill="${h}"/>`};
+const HB={long:h=>`<path d="M28 46Q23 13 50 13Q77 13 72 46Q78 64 70 80L30 80Q22 64 28 46Z" fill="${h}"/>`,bun:h=>`<path d="M30 46Q26 20 50 20Q74 20 70 46Q72 56 68 62L32 62Q28 56 30 46Z" fill="${h}"/>`};
+const OUT={suit:'<path d="M40 68L50 92L60 68Z" fill="#fff"/><path d="M47 73h6l2.5 17-5.5 5-5.5-5z" fill="#d1343b"/><path d="M33 70L47 94L38 100H18Z M67 70L53 94L62 100H82Z" fill="#0c1730"/>',coat:'<path d="M40 68L50 86L60 68Z" fill="#14b8a6"/><path d="M36 70Q33 92 46 92" stroke="#475569" fill="none" stroke-width="2.2"/><circle cx="47.5" cy="92" r="3" fill="#94a3b8"/><path d="M34 70L46 100H22Z M66 70L54 100H78Z" fill="#e2e8f0"/>',vest:'<path d="M40 68L50 86L60 68Z" fill="#fff"/><path d="M34 70L46 100H22Z M66 70L54 100H78Z" fill="#1f2937"/><path d="M43 72l7 4-7 4zM57 72l-7 4 7 4z" fill="#dc2626"/>',hood:'<path d="M37 68Q50 84 63 68L60 64Q50 74 40 64Z" fill="rgba(0,0,0,.22)"/><path d="M44 78v12M56 78v12" stroke="rgba(0,0,0,.22)" stroke-width="2" stroke-linecap="round"/>',scarf:'<path d="M36 68Q50 80 64 68L66 76Q50 88 34 76Z" fill="#f59e0b"/>'};
+const TOP={glasses:'<g fill="none" stroke="#334155" stroke-width="1.7"><circle cx="42" cy="46" r="6.2"/><circle cx="58" cy="46" r="6.2"/><path d="M48.2 45.5h3.6"/></g>',cap:'<path d="M30 36Q50 8 70 36Z" fill="#0369a1"/><rect x="27" y="35" width="46" height="5" rx="2.5" fill="#075985"/><circle cx="50" cy="22" r="2.5" fill="#fbbf24"/>',headset:'<path d="M31 46Q30 16 50 16Q70 16 69 46" fill="none" stroke="#111827" stroke-width="3.2"/><rect x="26" y="40" width="8" height="14" rx="4" fill="#f59e0b"/><path d="M30 54Q33 63 43 61" stroke="#111827" stroke-width="2" fill="none"/><circle cx="44" cy="61" r="2.6" fill="#111827"/>',heart:'<circle cx="80" cy="25" r="10" fill="#fff"/><path d="M80 32.5C72 27 74.5 20 80 24C85.5 20 88 27 80 32.5Z" fill="#f43f5e"/>',star:'<circle cx="20" cy="26" r="10" fill="#fff"/><path d="M20 19l2 4.2 4.6.6-3.4 3.2.9 4.6L20 29.4l-4.1 2.2.9-4.6-3.4-3.2 4.6-.6z" fill="#fbbf24"/>',phones:'<path d="M31 46Q30 15 50 15Q70 15 69 46" fill="none" stroke="#2563eb" stroke-width="4"/><rect x="25.5" y="39" width="9" height="16" rx="4.5" fill="#2563eb"/><rect x="65.5" y="39" width="9" height="16" rx="4.5" fill="#2563eb"/>',mic:'<path d="M30 56Q34 66 45 63" stroke="#1f2937" stroke-width="2" fill="none"/><circle cx="46" cy="63" r="2.6" fill="#1f2937"/>'};
+const AVD={interviewer:['#f7c6a8','#4a2b27','short','#14213f','suit','glasses','#a5c8ff'],coach:['#c68a62','#2a1a17','short','#f59e0b','','headset','#e6e3a6'],debater:['#f7c6a8','#4a2b27','long','#6ea35f','','glasses','#e6e3a6'],crush:['#f7c6a8','#4a2b27','long','#2f7de8','','heart','#b8ead9'],waiter:['#e2a77f','#2a1a17','short','#f8fafc','vest','','#fcd9b0'],agent:['#e2a77f','#3b2220','bun','#0ea5e9','scarf','','#bae6fd'],doctor:['#f7c6a8','#8b929c','short','#f8fafc','coat','glasses','#b8ead9'],friend:['#f7c6a8','#2f1b19','quiff','#c2410c','','star','#d8d0f5']};
+function av(k,cls=''){
+ if(k==='tutor')return `<div class="av ${cls}" style="--bgc:${S.tutor.bg}">${tutorSvg(S.tutor)}</div>`;
+ const [sk,h,hs,c,o,t,bg]=AVD[k]||AVD.friend;
+ return `<div class="av ${cls}" style="--bgc:${bg}"><svg viewBox="0 0 100 100">${(HB[hs]||(()=>''))(h)}<path d="M10 100Q12 69 50 67Q88 69 90 100Z" fill="${c}"/><path d="M41 68Q50 79 59 68Z" fill="${sk}"/>${OUT[o]||''}<rect x="43" y="58" width="14" height="12" rx="5" fill="${sk}"/><ellipse cx="32" cy="48" rx="3.4" ry="5" fill="${sk}"/><ellipse cx="68" cy="48" rx="3.4" ry="5" fill="${sk}"/><ellipse cx="50" cy="46" rx="18" ry="20" fill="${sk}"/>${HF[hs](h)}${eyes()}${mouth}${t?TOP[t]:''}</svg></div>`}
+const TD={name:'Podi',gender:'boy',sk:'#f7c6a8',h:'#4a2b27',hs:'quiff',c:'#0f9d6a',o:'hood',ph:'#2563eb',gl:false,bg:'#fde68a'};
+S.tutor=Object.assign({},TD,S.tutor);
+const ME0={name:'',native:'English',goal:'',field:'',interests:''};
+S.me=Object.assign({},ME0,S.me);
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function meCtx(){const m=S.me;return [m.name&&`The learner's name is ${m.name}; use it naturally now and then.`,m.goal&&`Their goal: ${m.goal}.`,m.field&&`They do/study: ${m.field}.`,m.interests&&`Interests: ${m.interests}.`,`Their native language is ${m.native}; use it for short explanations.`].filter(Boolean).join(' ')}
+function meEditor(v){
+ const M=S.me,G=['','Get a job / ace interviews','Travel','Study abroad','Pass an exam (IELTS, TOEFL...)','Grow in my career','Talk with friends and family','Just for fun'];
+ const c=el(`<div class="card"><h3 style="margin-top:0">About you</h3><p class="muted">Your tutor uses this to call you by name and personalise lessons. It is saved only in this browser and sent to Gemini along with your messages.</p>
+ <label>Your name</label><input id="mn" maxlength="30">
+ <label>Your native language</label><select id="mv">${Object.keys(LANGS).map(x=>`<option>${x}</option>`).join('')}</select>
+ <label>Main goal</label><select id="mg">${G.map(x=>`<option value="${x}">${x||'Choose a goal'}</option>`).join('')}</select>
+ <label>What do you do? (student, developer, nurse...)</label><input id="mf" maxlength="40">
+ <label>Interests (optional)</label><input id="mi" maxlength="60"></div>`);
+ v.appendChild(c);
+ [['mn','name'],['mv','native'],['mg','goal'],['mf','field'],['mi','interests']].forEach(([id,k])=>{const e=c.querySelector('#'+id);e.value=M[k];e.oninput=e.onchange=()=>{M[k]=e.value.trim();tutorC=null;save()}})}
+const VC={interviewer:['m',.75,.95,0],coach:['m',.95,1.08,1],debater:['f',1,1.05,0],crush:['f',1.25,.95,1],waiter:['m',1.1,1.1,2],agent:['f',.95,1,2],doctor:['m',.7,.9,3],friend:['m',1.2,1.05,4]};
+const FEM=/female|woman|zira|samantha|susan|hazel|heera|kalpana|veena|karen|moira|tessa|fiona|victoria|allison|jenny|aria|sonia|libby|natasha|neerja|swara|lekha|monica|paulina|helena|elsa|katja|hedda|alice|lucia|joana|nanami|yuna|amelie/i;
+const MAL=/male|david|mark|james|ravi|hemant|prabhat|daniel|alex|fred|george|rishi|guy|ryan|davis|diego|jorge|pablo|thomas|henri|stefan|conrad|hans|luca|ichiro|keita|antonio|alvaro/i;
+function pickVoice(k){
+ const g=k==='tutor'?(S.tutor.gender==='girl'?'f':'m'):VC[k][0],i=k==='tutor'?0:VC[k][3],pre=LANGS[S.lang].slice(0,2).toLowerCase();
+ const all=(window.speechSynthesis.getVoices()||[]).filter(v=>v.lang.replace('_','-').toLowerCase().startsWith(pre));
+ const gd=v=>FEM.test(v.name)?'f':MAL.test(v.name)?'m':null;
+ let pool=all.filter(v=>gd(v)===g);if(!pool.length)pool=all.filter(v=>!gd(v));if(!pool.length)pool=all;
+ return pool.length?pool[i%pool.length]:null}
+let stp=0;
+function learnCard(v){const c=el(`<div class="card"><h3 style="margin-top:0">What do you want to learn?</h3><label>Language to learn</label><select id="wl">${Object.keys(LANGS).map(x=>`<option ${x===S.lang?'selected':''}>${x}</option>`).join('')}</select><label>Your level</label><select id="wv">${['Beginner','Intermediate','Advanced'].map(x=>`<option ${x===S.level?'selected':''}>${x}</option>`).join('')}</select></div>`);v.appendChild(c);c.querySelector('#wl').onchange=e=>{S.lang=e.target.value;tutorC=null;save()};c.querySelector('#wv').onchange=e=>{S.level=e.target.value;tutorC=null;save()}}
+function rSetup(v){
+ const T=['About you','Connect Gemini','Meet your tutor'];
+ v.innerHTML=`<div class="card" style="text-align:center"><h2 style="margin:0">Welcome to Learn 2 Speak</h2><p class="muted" style="margin:4px 0 0">Step ${stp+1} of 3 · ${T[stp]}</p><div class="bar" style="margin-top:10px"><i style="width:${(stp+1)/3*100}%"></i></div></div>`;
+ if(stp===0){meEditor(v);learnCard(v)}
+ if(stp===1){const c=el(`<div class="card"><h3 style="margin-top:0">Connect Gemini (free)</h3><p class="muted">Create a free key at aistudio.google.com/apikey and paste it below. It stays in this browser and is only sent to Google.</p><label>Gemini API key</label><input id="wk" type="password" placeholder="Paste your key"></div>`);v.appendChild(c);c.querySelector('#wk').value=S.key}
+ if(stp===2)tutorEditor(v);
+ const er=el('<p id="we" style="color:var(--bad);font-weight:700"></p>'),r=el(`<div class="row"><button class="g" id="bk" ${stp?'':'disabled'}>Back</button><button class="p" id="nx" style="margin-left:auto">${stp===2?'Start learning':'Next'}</button></div>`);
+ v.appendChild(er);v.appendChild(r);
+ $('#bk').onclick=()=>{stp--;render()};
+ $('#nx').onclick=async e=>{er.textContent='';
+  if(stp===0){if(!S.me.name){er.textContent='Please enter your name.';return}stp=1;render();return}
+  if(stp===1){const k=$('#wk').value.trim();if(!k){er.textContent='Paste your API key to continue.';return}S.key=k;e.target.disabled=1;e.target.textContent='Checking...';
+   try{await gem([{role:'user',parts:[{text:'Say hi'}]}],'',false);save();stp=2;render()}catch(x){er.textContent=x.message;e.target.disabled=0;e.target.textContent='Next'}return}
+  S.setup=1;tutorC=null;save();tab='learn';render()}}
+HF.curly=h=>`<g fill="${h}"><circle cx="34" cy="26" r="8"/><circle cx="44" cy="18" r="8"/><circle cx="56" cy="18" r="8"/><circle cx="66" cy="26" r="8"/><path d="M31 46Q27 28 50 27Q73 28 69 46Q64 34 50 33Q36 34 31 46Z"/></g>`;
+function tutorSvg(T){
+ const {sk,h,hs,c,o,ph,gl}=T;
+ return `<svg viewBox="0 0 100 100"><rect x="15" y="22" width="70" height="84" rx="24" fill="#475569"/><rect x="21" y="28" width="58" height="70" rx="19" fill="#64748b"/><circle cx="78" cy="22" r="7" fill="#ef4444" opacity=".25"/><circle cx="78" cy="22" r="3.6" fill="#ef4444"/>${(HB[hs]||(()=>''))(h)}<path d="M10 100Q12 69 50 67Q88 69 90 100Z" fill="${c}"/><path d="M41 68Q50 79 59 68Z" fill="${sk}"/>${o==='hood'?OUT.hood:o==='suit'?OUT.suit:''}<rect x="43" y="58" width="14" height="12" rx="5" fill="${sk}"/><ellipse cx="50" cy="64" rx="8" ry="3.5" fill="#0002"/><ellipse cx="32" cy="48" rx="3.4" ry="5" fill="${sk}"/><ellipse cx="68" cy="48" rx="3.4" ry="5" fill="${sk}"/><ellipse cx="50" cy="46" rx="18" ry="20" fill="${sk}"/>${HF[hs](h)}${eyes()}${mouth}${T.gender==='girl'?'<path d="M38.4 43.8l-2.2-1.4M61.6 43.8l2.2-1.4M39.5 42.8l-1-2.4M60.5 42.8l1-2.4" stroke="#2b1816" stroke-width="1.3" stroke-linecap="round"/>':''}${gl?TOP.glasses:''}${ph?`<path d="M31 46Q30 14 50 14Q70 14 69 46" fill="none" stroke="${ph}" stroke-width="4"/><rect x="25.5" y="39" width="9" height="16" rx="4.5" fill="${ph}"/><rect x="65.5" y="39" width="9" height="16" rx="4.5" fill="${ph}"/>`:''}${TOP.mic}<rect x="62" y="66" width="16" height="24" rx="8" fill="#cbd5e1"/><path d="M62 74h16M62 79h16M62 84h16" stroke="#94a3b8" stroke-width="1.2"/><path d="M59 70v14Q59 95 70 95Q81 95 81 84V70" fill="none" stroke="#334155" stroke-width="2"/><path d="M70 95v6" stroke="#334155" stroke-width="3"/></svg>`}
+function tutorEditor(v){
+ const T=S.tutor,card=el('<div class="card"><h3 style="margin-top:0">Your tutor</h3><div class="hd"><div id="tp"></div><div style="flex:1"><label>Name</label><input id="tn" maxlength="14"></div></div><div id="tr"></div></div>');
+ v.appendChild(card);card.querySelector('#tn').value=T.name;
+ card.querySelector('#tn').oninput=e=>{T.name=e.target.value.trim()||'Podi';tutorC=null;save()};
+ const R=[['I am a','gender',['boy','girl']],['Skin','sk',['#f7c6a8','#e2a77f','#c68a62','#8d5a3b','#5c3a24']],['Hair style','hs',['short','quiff','long','bun','curly']],['Hair color','h',['#2a1a17','#4a2b27','#8a5a2b','#d9a441','#8b929c','#c2410c']],['Outfit','o',['hood','tee','suit']],['Outfit color','c',['#0f9d6a','#2f7de8','#c2410c','#7c3aed','#ec4899','#f59e0b','#111827']],['Headphones','ph',['','#2563eb','#ef4444','#111827','#ec4899']],['Glasses','gl',[false,true]],['Background','bg',['#fde68a','#a5c8ff','#b8ead9','#fbcfe8','#d8d0f5','#fcd9b0']]];
+ const draw=()=>{card.querySelector('#tp').innerHTML=av('tutor','xl');const r=card.querySelector('#tr');r.innerHTML='';
+  R.forEach(([lb,k,os])=>{r.appendChild(el(`<label>${lb}</label>`));const w=el('<div class="rw"></div>');
+   os.forEach(o=>{const b=el('<button class="sw"></button>');const col=typeof o==='string'&&o[0]==='#';
+    if(col)b.style.background=o;else b.textContent=o===''?'None':o===true?'Yes':o===false?'No':o;if(col)b.style.minWidth='34px';
+    if(T[k]===o)b.classList.add('on');b.onclick=()=>{T[k]=o;if(k==='gender')T.hs=o==='girl'?'long':'quiff';tutorC=null;save();draw()};w.appendChild(b)});r.appendChild(w)})};
+ draw();const hv=el('<button class="g" style="margin-top:14px">🔊 Hear my voice</button>');hv.onclick=()=>speak("Hi, I'm "+T.name+'!',null,'tutor',1);card.appendChild(hv)}
+document.addEventListener('mousemove',e=>{const c=e.target.closest&&e.target.closest('.sc');if(!c)return;const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;c.style.transform=`perspective(500px) rotateY(${x*14}deg) rotateX(${-y*14}deg) translateZ(6px)`});
+document.addEventListener('mouseout',e=>{const c=e.target.closest&&e.target.closest('.sc');if(c)c.style.transform=''});
+const tutorSys=()=>`You are ${S.tutor.name} (a ${S.tutor.gender==='girl'?'woman':'man'}), a friendly ${S.lang} tutor for a ${S.level} learner. Reply mostly in ${S.lang} at their level, in 1-3 short sentences. If they make a mistake, add a brief correction in the learner's native language on a new line starting with "Tip:". End with a short question to keep talking. ${meCtx()}`;
+function rSet(v){queueMicrotask(()=>{meEditor(v);tutorEditor(v)});v.innerHTML=`<div class="card"><label>Gemini API key (free at aistudio.google.com/apikey)</label><input id="k" type="password" value="${S.key}" placeholder="AIza...">
+<p class="muted">Stored only in this browser. Requests go straight from your browser to Google.</p>
+<label>Language to learn</label><select id="l">${Object.keys(LANGS).map(x=>`<option ${x===S.lang?'selected':''}>${x}</option>`)}</select>
+<label>Level</label><select id="lv">${['Beginner','Intermediate','Advanced'].map(x=>`<option ${x===S.level?'selected':''}>${x}</option>`)}</select>
+<label>AI model <span class="muted">(change only if Google retires it)</span></label><input id="md" value="${S.model}">
+<label><input type="checkbox" id="vo" style="width:auto" ${S.voice?'checked':''}> Tutor speaks replies aloud</label><br><button class="p" id="sv">Save</button></div>`;
+ $('#sv').onclick=()=>{S.key=$('#k').value.trim();S.lang=$('#l').value;S.level=$('#lv').value;S.model=$('#md').value.trim()||'gemini-3.8-flash';S.voice=$('#vo').checked;tutorC=null;chat=null;save();tab='learn';render()}}
+function rLearn(v){
+ if(quiz&&quiz.done){v.innerHTML=`<div class="card" style="text-align:center"><div class="big">${quiz.score}/${quiz.q.length}</div><p>+${quiz.score*10} XP earned</p><button class="p" id="a">Next lesson</button></div>`;$('#a').onclick=()=>{quiz=null;render()};return}
+ if(quiz){const q=quiz.q[quiz.i];v.innerHTML=`<div class="card"><div class="bar"><i style="width:${quiz.i/quiz.q.length*100}%"></i></div><h3>${q.q}</h3><div id="o"></div><div id="ex"></div></div>`;
+  q.options.forEach((t,j)=>{const b=el('<button class="opt"></button>');b.textContent=t;b.onclick=()=>{if(quiz.ans)return;quiz.ans=1;const ok=j===q.answer;if(ok){quiz.score++;b.classList.add('right')}else{b.classList.add('wrong');$('#o').children[q.answer].classList.add('right')}
+   const ex=$('#ex');ex.innerHTML=`<p>${ok?'✅ Correct!':'❌ Not quite.'} <span class="muted"></span></p><button class="p">Continue</button>`;ex.querySelector('span').textContent=q.explain||'';
+   ex.querySelector('button').onclick=()=>{quiz.ans=0;quiz.i++;if(quiz.i>=quiz.q.length){quiz.done=1;bump(quiz.score*10)}render()}};$('#o').appendChild(b)});return}
+ v.innerHTML=`<div class="card hd">${av('tutor','xl')}<div><h2 style="margin:0">${S.me.name?'Hi '+esc(S.me.name)+'! ':'Hi! '}I'm ${esc(S.tutor.name)}.</h2><p style="margin:4px 0 12px">Ready for today's ${S.lang} lesson? 5 quick questions, then let's talk.${S.me.name?'':' First, tell me about yourself in Settings.'}</p><button class="p" id="go">Start lesson</button> <button class="g" id="cz">Customise tutor</button><p id="e" class="muted"></p></div><div class="chips"><i style="background:#c4b5fd">⚡</i><i style="background:#bfdbfe">A+</i><i style="background:#fecaca">▶</i><i style="background:#fde68a">📄</i></div></div>`;
+ $('#cz').onclick=()=>{tab='settings';render()};$('#go').onclick=async e=>{e.target.disabled=1;e.target.textContent='Creating lesson...';
+  try{const q=await gem([{role:'user',parts:[{text:`Make 5 multiple-choice questions teaching ${S.lang} to a speaker of ${S.me.native} at ${S.level} level${S.me.goal?', focused on their goal: '+S.me.goal:''}. Mix vocabulary, grammar, translation. JSON array of {"q":string,"options":[4 strings],"answer":index 0-3,"explain":short string in ${S.me.native}}.`}]}],'',true);
+   quiz={q:q.slice(0,5),i:0,score:0};render()}catch(x){$('#e').textContent=x.message;e.target.disabled=0;e.target.textContent='Start lesson'}}}
+function rPractice(v){
+ if(chat){rChat(v,chat);return}
+ v.innerHTML=`<p class="muted">Pick a situation. An AI character plays the other person, then grades you.</p><div class="grid"></div>`;
+ SCEN.forEach(([i,n,p,a,bn])=>{const b=el(`<button class="sc hd">${av(a)}<span><b>${n}</b><span class="muted">${bn}</span></span></button>`);
+  b.onclick=()=>{chat={sys:`${p} Speak ${S.lang} at ${S.level} level. Keep replies to 1-3 sentences. Start by greeting and asking the first question. ${meCtx()}`,title:n,grade:1,scen:n,start:1,av:a,bn};render()};v.querySelector('.grid').appendChild(b)})}
+function speak(t,cb,k,force){if(!(S.voice||force)||!window.speechSynthesis){cb&&cb();return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t.replace(/Tip:[\s\S]*/,'')),P=k&&k!=='tutor'?VC[k]:null,vc=pickVoice(k||'tutor');u.lang=LANGS[S.lang];if(vc)u.voice=vc;u.pitch=P?P[1]:(S.tutor.gender==='girl'?1.15:.9);u.rate=P?P[2]:1;u.onend=u.onerror=()=>cb&&cb();speechSynthesis.speak(u)}
+function rChat(v,c){
+ c.h=c.h||[];const a=c.av||'tutor';
+ v.innerHTML=`<div class="card"><div class="hd">${av(a,'lg')}<div><b style="font-size:18px">${esc(c.bn||'Podi')}</b><div class="muted">${c.title}</div></div>${c.grade?'<button class="g" id="x" style="margin-left:auto">Finish</button>':''}</div><div id="log"></div>
+ <div class="row"><button class="g mic" id="mic" title="Speak">🎙️</button><input id="t" placeholder="Type or tap the mic..."><button class="p" id="s">Send</button></div><p id="e" class="muted"></p></div>`;
+ const log=$('#log'),A=$('.hd .av');
+ const add=(r,t)=>{const u=r==='user',m=el('<div class="m"></div>');m.className='m '+(u?'u':'a');m.textContent=t;const row=el(`<div class="mr ${u?'u':''}">${u?'':av(a,'sm')}</div>`);row.appendChild(m);log.appendChild(row);log.scrollTop=1e9;return row};
+ c.h.forEach(m=>{if(!(m.role==='user'&&m.parts[0].text==='Begin.'))add(m.role,m.parts[0].text)});
+ async function turn(){A.classList.add('talk');const d=add('model','• • •');
+  try{const t=await gem(c.h.slice(-10),c.sys);d.remove();c.h.push({role:'model',parts:[{text:t}]});add('model',t);speak(t,()=>A.classList.remove('talk'),a)}catch(x){d.remove();A.classList.remove('talk');$('#e').textContent=x.message}}
+ if(!c.h.length){if(c.open){c.h.push({role:'model',parts:[{text:c.open}]});add('model',c.open)}else if(c.start){c.h.push({role:'user',parts:[{text:'Begin.'}]});turn()}}
+ const send=async()=>{const i=$('#t'),t=i.value.trim();if(!t)return;i.value='';c.h.push({role:'user',parts:[{text:t}]});add('user',t);bump(2);await turn()};
+ $('#s').onclick=send;$('#t').onkeydown=e=>{if(e.key==='Enter')send()};
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+ $('#mic').onclick=()=>{if(!SR){$('#e').textContent='Voice input needs Chrome or Edge.';return}
+  if(rec){rec.stop();return}rec=new SR();rec.lang=LANGS[S.lang];rec.onresult=e=>{$('#t').value=e.results[0][0].transcript;send()};
+  rec.onerror=e=>{$('#e').textContent='Mic error: '+e.error+(e.error==='not-allowed'?' - allow the microphone for this site (needs https).':'')};
+  rec.onend=()=>{rec=null;$('#mic').classList.remove('on')};$('#mic').classList.add('on');rec.start()};
+ if($('#x'))$('#x').onclick=async e=>{const us=c.h.filter(m=>m.role==='user'&&m.parts[0].text!=='Begin.').length;if(us<2){$('#e').textContent='Say a few more things first.';return}
+  e.target.disabled=1;e.target.textContent='Grading...';
+  try{const tr=c.h.map(m=>(m.role==='user'?'LEARNER: ':'AI: ')+m.parts[0].text).join('\n');
+   const g=await gem([{role:'user',parts:[{text:`Grade the LEARNER's ${S.lang} in this "${c.scen}" practice (${S.level} level). ${S.me.goal?'Learner goal: '+S.me.goal+'. ':''}Be honest and specific; also judge conversation flow and respectfulness. JSON: {"overall":0-100,"fluency":0-100,"grammar":0-100,"vocabulary":0-100,"confidence":0-100,"strengths":[2 short strings],"improve":[3 short actionable strings],"better":[up to 3 {"said":string,"say":string}]}\n\n${tr}`}]}],'',true);
+   bump(Math.round(g.overall/5));showGrade(v,g)}catch(x){$('#e').textContent=x.message;e.target.disabled=0;e.target.textContent='Finish'}}}
+function showGrade(v,g){
+ const bars=['fluency','grammar','vocabulary','confidence'].map(k=>`<p>${k[0].toUpperCase()+k.slice(1)} <b>${g[k]}</b></p><div class="bar"><i style="width:${g[k]}%"></i></div>`).join('');
+ v.innerHTML=`<div class="card"><div style="text-align:center"><div class="big">${g.overall}</div><span class="muted">overall score</span></div>${bars}<h3>Strengths</h3><ul id="a"></ul><h3>How to improve</h3><ul id="b"></ul><h3>Say it better</h3><ul id="c"></ul><button class="p" id="r">Practice again</button></div>`;
+ g.strengths.forEach(t=>{const l=el('<li></li>');l.textContent=t;$('#a').appendChild(l)});g.improve.forEach(t=>{const l=el('<li></li>');l.textContent=t;$('#b').appendChild(l)});
+ (g.better||[]).forEach(o=>{const l=el('<li></li>');l.textContent=`"${o.said}" → "${o.say}"`;$('#c').appendChild(l)});
+ $('#r').onclick=()=>{chat=null;render()}}
+save();render();
+</script></body></html>
