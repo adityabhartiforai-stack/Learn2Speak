@@ -40,7 +40,7 @@ Each character has their own look and their own voice. When you finish, you get 
 
 ## Built with
 
-- HTML, CSS and vanilla JavaScript, all in a single `learn2speak.html` (no build step, no dependencies)
+- HTML, CSS and vanilla JavaScript, all in a single `index.html` (no build step, no dependencies)
 - [Google Gemini API](https://ai.google.dev/) (free tier) for lessons, chat and grading
 - Web Speech API for voice input and spoken replies
 - Hand-drawn SVG characters, generated in code
@@ -58,7 +58,7 @@ Each character has their own look and their own voice. When you finish, you get 
 ## Deploy your own
 
 1. Fork or clone this repo.
-2. Create a new site on [Netlify]() and connect the repo, or drag `learn2speak.html` into Netlify Drop.
+2. Create a new site on [Netlify](https://app.netlify.com/) and connect the repo, or drag `index.html` into Netlify Drop.
 3. No build command and no environment variables are needed.
 
 ## Privacy
